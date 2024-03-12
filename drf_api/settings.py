@@ -13,9 +13,13 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 import os
 import dj_database_url
+import re
+import logging
 
 if os.path.exists('env.py'):
     import env
+
+logger = logging.getLogger(__name__)
 
 CLOUDINARY_STORAGE = {
     'CLOUDINARY_URL': os.environ.get('CLOUDINARY_URL')
@@ -59,7 +63,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = 'DEV' in os.environ
 
-ALLOWED_HOSTS = ['localhost', os.environ.get('ALLOWED_HOST')]
+ALLOWED_HOSTS = ['127.0.0.1', os.environ.get('ALLOWED_HOST')]
 
 
 # Application definition
@@ -111,11 +115,28 @@ else:
         r"^https:\/\/localhost:3000$",
     ]
 
+
+if 'CLIENT_ORIGIN_DEV' in os.environ:
+    match = re.match(
+    r'^.+-', os.environ.get('CLIENT_ORIGIN_DEV', ''), re.IGNORECASE
+    )
+    if match:
+        extracted_url = match.group(0)
+        CORS_ALLOWED_ORIGIN_REGEXES = [
+        rf"{extracted_url}(eu|us)\d+\w\.gitpod\.io$",
+        ]
+    else:
+        logger.warning("CLIENT_ORIGIN_DEV environment variable does not contain the expected value or is not set.")
+
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+
+
 JWT_AUTH_COOKIE = 'my-app-auth'
 JWT_AUTH_REFRESH_COOKIE = 'my-refresh-token'
 JWT_AUTH_SAMESITE = 'None'
 
-CORS_ALLOW_CREDENTIALS = True
+
 
 ROOT_URLCONF = 'drf_api.urls'
 
