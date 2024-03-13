@@ -115,7 +115,6 @@ else:
         r"^https:\/\/localhost:3000$",
     ]
 
-
 if 'CLIENT_ORIGIN_DEV' in os.environ:
     match = re.match(
     r'^.+-', os.environ.get('CLIENT_ORIGIN_DEV', ''), re.IGNORECASE
