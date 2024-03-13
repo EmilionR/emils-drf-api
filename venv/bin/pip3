@@ -1,4 +1,4 @@
-#!/home/emil/Skrivbord/web-projects/emils-drf-api/venv/bin/python
+#!/home/emil/Skrivbord/web-projects/emils-drf-api/venv/bin/python3.8
 # -*- coding: utf-8 -*-
 import re
 import sys
