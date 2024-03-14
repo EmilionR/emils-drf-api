@@ -64,8 +64,11 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = 'DEV' in os.environ
 
-ALLOWED_HOSTS = ['127.0.0.1', os.environ.get('ALLOWED_HOST')]
-
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    '8000-emilionr-emilsdrfapi-noo9k8scmiq.ws-eu110.gitpod.io',
+    os.environ.get('ALLOWED_HOST'),
+]
 
 # Application definition
 
@@ -112,21 +115,18 @@ if 'CLIENT_ORIGIN' in os.environ:
     ]
 else:
     CORS_ALLOWED_ORIGIN_REGEXES = [
+        r"^https://.*\.gitpod\.io$",
         r"^http:\/\/localhost:3000$",
         r"^https:\/\/localhost:3000$",
     ]
 
 if 'CLIENT_ORIGIN_DEV' in os.environ:
-    match = re.match(
-    r'^.+-', os.environ.get('CLIENT_ORIGIN_DEV', ''), re.IGNORECASE
-    )
-    if match:
-        extracted_url = match.group(0)
-        CORS_ALLOWED_ORIGIN_REGEXES = [
+    extracted_url = re.match(r'^.+-', os.environ.get('CLIENT_ORIGIN_DEV', ''), re.IGNORECASE).group(0)
+    CORS_ALLOWED_ORIGIN_REGEXES = [
         rf"{extracted_url}(eu|us)\d+\w\.gitpod\.io$",
-        ]
-    else:
-        logger.warning("CLIENT_ORIGIN_DEV environment variable does not contain the expected value or is not set.")
+    ]
+else:
+    logger.warning("CLIENT_ORIGIN_DEV environment variable does not contain the expected value or is not set.")
 
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
