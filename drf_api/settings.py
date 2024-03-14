@@ -64,8 +64,18 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = 'DEV' in os.environ
 
-ALLOWED_HOSTS = ['127.0.0.1', os.environ.get('ALLOWED_HOST')]
+ALLOWED_HOSTS = [
+    'localhost',
+    '.gitpod.io',
+    '.herokuapp.com',
+]
 
+CSRF_TRUSTED_ORIGINS = [
+    "http://127.0.0.1:8000",
+    "http://localhost:3000",
+    "https://*.gitpod.io",
+    "https://*.herokuapp.com",
+]
 
 # Application definition
 
@@ -105,31 +115,29 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
+"""
 if 'CLIENT_ORIGIN' in os.environ:
     CORS_ALLOWED_ORIGINS = [
         os.environ.get('CLIENT_ORIGIN')
     ]
 else:
     CORS_ALLOWED_ORIGIN_REGEXES = [
+        r"^http://.*\.gitpod\.io$",
+        r"^https://.*\.gitpod\.io$",
         r"^http:\/\/localhost:3000$",
         r"^https:\/\/localhost:3000$",
     ]
-
-if 'CLIENT_ORIGIN_DEV' in os.environ:
-    match = re.match(
-    r'^.+-', os.environ.get('CLIENT_ORIGIN_DEV', ''), re.IGNORECASE
-    )
-    if match:
-        extracted_url = match.group(0)
-        CORS_ALLOWED_ORIGIN_REGEXES = [
-        rf"{extracted_url}(eu|us)\d+\w\.gitpod\.io$",
-        ]
-    else:
-        logger.warning("CLIENT_ORIGIN_DEV environment variable does not contain the expected value or is not set.")
+    CORS_ALLOWED_ORIGINS = [
+        os.environ.get('CLIENT_ORIGIN_DEV')
+    ]
+"""
 
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
+
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_AUTHENTICATION_METHOD = 'username'
+ACCOUNT_EMAIL_REQUIRED = False
 
 ROOT_URLCONF = 'drf_api.urls'
 
