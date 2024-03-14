@@ -65,9 +65,16 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = 'DEV' in os.environ
 
 ALLOWED_HOSTS = [
-    '127.0.0.1',
-    '8000-emilionr-emilsdrfapi-noo9k8scmiq.ws-eu110.gitpod.io',
-    os.environ.get('ALLOWED_HOST'),
+    'localhost',
+    '.gitpod.io',
+    '.herokuapp.com',
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://127.0.0.1:8000",
+    "http://localhost:3000",
+    "https://*.gitpod.io",
+    "https://*.herokuapp.com",
 ]
 
 # Application definition
@@ -127,6 +134,10 @@ else:
 
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
+
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_AUTHENTICATION_METHOD = 'username'
+ACCOUNT_EMAIL_REQUIRED = False
 
 ROOT_URLCONF = 'drf_api.urls'
 
